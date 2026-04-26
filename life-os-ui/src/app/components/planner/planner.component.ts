@@ -6,7 +6,9 @@ import { TaskRequest, TaskResponse, TaskStatus, TaskPriority } from '../../model
 import { Routine } from '../../models/routine';
 import { CardComponent } from '../ui/card/card.component';
 import { RoutineService } from '../../services/routine.service';
+import { GoalService } from '../../services/goal.service';
 import { TASK_PRIORITY_OPTIONS, TASK_STATUS_COLUMNS } from '../../constants/ui.constants';
+import { Goal } from '../../models/goal';
 
 @Component({
   selector: 'app-planner',
@@ -18,13 +20,15 @@ import { TASK_PRIORITY_OPTIONS, TASK_STATUS_COLUMNS } from '../../constants/ui.c
 export class PlannerComponent implements OnInit {
   tasks: TaskResponse[] = [];
   routines: Routine[] = [];
+  goals: Goal[] = [];
   newTask: TaskRequest = {
     title: '',
     description: '',
     priority: TaskPriority.MEDIUM,
     status: TaskStatus.PENDING,
     isRecurringBlock: false,
-    estimatedMinutes: 30
+    estimatedMinutes: 30,
+    goalId: undefined
   };
 
   TaskStatus = TaskStatus;
@@ -38,7 +42,8 @@ export class PlannerComponent implements OnInit {
 
   constructor(
     private taskService: TaskService,
-    private routineService: RoutineService
+    private routineService: RoutineService,
+    private goalService: GoalService
   ) {}
 
   getPriorityOption(priority: TaskPriority) {
@@ -90,6 +95,14 @@ export class PlannerComponent implements OnInit {
   ngOnInit() {
     this.fetchTasks();
     this.fetchActiveRoutines();
+    this.fetchGoals();
+  }
+
+  fetchGoals() {
+    this.goalService.getGoals().subscribe({
+      next: (data) => this.goals = data,
+      error: (err) => console.error('Failed to fetch goals', err)
+    });
   }
 
   fetchActiveRoutines() {
@@ -169,7 +182,8 @@ export class PlannerComponent implements OnInit {
       priority: TaskPriority.MEDIUM,
       status: TaskStatus.PENDING,
       isRecurringBlock: false,
-      estimatedMinutes: 30
+      estimatedMinutes: 30,
+      goalId: undefined
     };
   }
 }

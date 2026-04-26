@@ -1,0 +1,90 @@
+<div class="max-w-6xl mx-auto animate-[fadeIn_0.5s_ease-out]">
+  <div class="flex items-center justify-between mb-10">
+    <div>
+      <h2 class="text-3xl font-heading font-semibold text-slate-50 mb-2">Long-Term Planning</h2>
+      <p class="text-slate-400 text-sm">Track your progress towards major life milestones.</p>
+    </div>
+    <button (click)="showAddModal = true" 
+            class="bg-primary hover:bg-primary-dark text-white px-6 py-2.5 rounded-xl font-medium transition-all duration-200 shadow-[0_4px_14px_rgba(99,102,241,0.39)] flex items-center gap-2">
+      <span class="text-xl">+</span> New Goal
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <app-card *ngFor="let goal of goals" class="group hover:scale-[1.02] transition-all duration-300">
+      <div class="flex justify-between items-start mb-6">
+        <div [class]="'px-2 py-1 rounded text-[9px] font-bold uppercase tracking-widest ' + 
+                     (goal.status === 'ACHIEVED' ? 'bg-green-500/10 text-green-400' : 'bg-primary/10 text-primary')">
+          {{ goal.status }}
+        </div>
+        <button (click)="deleteGoal(goal.id)" class="text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+          🗑️
+        </button>
+      </div>
+
+      <h3 class="text-xl font-semibold text-slate-100 mb-2">{{ goal.title }}</h3>
+      <p class="text-slate-500 text-sm mb-6 line-clamp-2 h-10">{{ goal.description }}</p>
+
+      <div class="space-y-2 mb-6">
+        <div class="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-tighter">
+          <span>Progress</span>
+          <span>{{ goal.progressPercentage | number:'1.0-0' }}%</span>
+        </div>
+        <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-primary to-primary-light transition-all duration-500"
+               [style.width.%]="goal.progressPercentage"></div>
+        </div>
+        <div class="flex justify-between text-[10px] text-slate-600 font-medium">
+          <span>{{ goal.completedTasks }} / {{ goal.totalTasks }} Tasks</span>
+          <span *ngIf="goal.targetDate">By {{ goal.targetDate | date }}</span>
+        </div>
+      </div>
+    </app-card>
+
+    <div *ngIf="goals.length === 0 && !isLoading" 
+         class="col-span-full py-20 text-center bg-white/[0.02] border border-dashed border-white/10 rounded-2xl">
+      <p class="text-slate-500 italic">No goals set yet. Define your vision to start tracking progress!</p>
+    </div>
+  </div>
+</div>
+
+<!-- Add Goal Modal -->
+<div *ngIf="showAddModal" class="fixed inset-0 z-50 flex items-center justify-center p-6 animate-[fadeIn_0.2s_ease-out]">
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="showAddModal = false"></div>
+  <app-card class="w-full max-w-lg relative z-10 shadow-2xl border-white/10" padding="large">
+    <h3 class="text-2xl font-heading font-semibold text-slate-50 mb-6">Set New Goal</h3>
+    
+    <form (ngSubmit)="createGoal()" class="space-y-4">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Title</label>
+        <input type="text" name="title" [(ngModel)]="newGoal.title" required
+               class="bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-slate-50 text-sm focus:outline-none focus:border-primary transition-all"
+               placeholder="e.g., Land a Senior Java Role">
+      </div>
+      
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Description</label>
+        <textarea name="description" [(ngModel)]="newGoal.description" rows="3"
+                  class="bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-slate-50 text-sm focus:outline-none focus:border-primary transition-all resize-none"
+                  placeholder="What does success look like?"></textarea>
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Target Date</label>
+        <input type="date" name="targetDate" [(ngModel)]="newGoal.targetDate"
+               class="bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-slate-50 text-sm focus:outline-none focus:border-primary transition-all">
+      </div>
+
+      <div class="flex gap-4 mt-8">
+        <button type="button" (click)="showAddModal = false"
+                class="flex-1 px-6 py-3 rounded-xl border border-white/10 text-slate-400 font-medium hover:bg-white/5 transition-all">
+          Cancel
+        </button>
+        <button type="submit" [disabled]="!newGoal.title || isLoading"
+                class="flex-1 bg-primary hover:bg-primary-dark text-white font-medium py-3 rounded-xl transition-all shadow-[0_4px_14px_rgba(99,102,241,0.39)] disabled:opacity-50">
+          {{ isLoading ? 'Saving...' : 'Set Goal' }}
+        </button>
+      </div>
+    </form>
+  </app-card>
+</div>

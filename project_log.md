@@ -57,3 +57,17 @@
 - **Soft Delete vs. Hard Delete:** We implemented hard delete for routines for now, but in professional systems, "Soft Delete" (using a `deleted` flag) is often preferred to keep historical records.
 - **CSV Storage in SQL:** Storing "Days of Week" as a comma-separated string is a simple way to handle multi-select data without a separate join table, though it makes SQL filtering slightly more complex (`LIKE` query).
 - **Interval Overlap Algorithm:** The logic `(start1 < end2 && end1 > start2)` is the mathematically correct way to check if two time ranges overlap. We applied this both for Task-Task, Task-Routine, and Routine-Routine conflicts.
+
+# Phase 3: Long-Term Goal Planning (Completed 2026-04-26)
+## Technical Implementation Details
+- **Backend Relational Mapping:**
+    - **One-to-Many:** `Goal` 1:N `Task`. Implemented using `@OneToMany(mappedBy = "goal")` in `Goal.java` and `@ManyToOne` in `Task.java`.
+    - **DTO Strategy:** Used `GoalResponse` to decouple the database entity from the API, specifically calculating `progressPercentage` on-the-fly in the `GoalService`.
+- **Frontend Dashboard:**
+    - Created `GoalDashboardComponent` with glassmorphism cards and dynamic progress bars.
+    - Integrated Goal selection into the `PlannerComponent` to bridge daily tasks with long-term vision.
+
+## Terminology & Concepts Log (Phase 3)
+- **Bidirectional Relationship:** A relationship in JPA where both entities have a reference to each other. *Careful:* Requires `mappedBy` on the non-owning side to avoid duplicate foreign keys.
+- **Lazy Loading (`FetchType.LAZY`):** JPA strategy to only load associated data (like a goal's tasks) when explicitly accessed. *Why?* Prevents "N+1 Problem" and saves memory.
+- **DTO (Data Transfer Object):** An object that carries data between processes. *Why?* To hide sensitive data (like `passwordHash`) and tailor responses for the UI (like adding `progressPercentage`).

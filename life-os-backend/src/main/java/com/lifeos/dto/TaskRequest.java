@@ -5,6 +5,7 @@ import com.lifeos.model.Task.TaskStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 public class TaskRequest {
@@ -17,4 +18,5 @@ public class TaskRequest {
     private LocalDateTime scheduledEnd;
     private Integer estimatedMinutes;
     private String tags;
+    private UUID goalId;
 }

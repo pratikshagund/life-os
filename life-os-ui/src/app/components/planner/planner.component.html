@@ -164,6 +164,15 @@
         </div>
       </div>
 
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Link to Goal (Optional)</label>
+        <select name="goalId" [(ngModel)]="newTask.goalId"
+                class="bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-slate-50 text-sm focus:outline-none focus:border-primary transition-all appearance-none">
+          <option [ngValue]="undefined">No Goal</option>
+          <option *ngFor="let goal of goals" [value]="goal.id">{{ goal.title }}</option>
+        </select>
+      </div>
+
       <div class="flex gap-4 mt-8">
         <button type="button" (click)="showAddModal = false"
                 class="flex-1 px-6 py-3 rounded-xl border border-white/10 text-slate-400 font-medium hover:bg-white/5 transition-all">

@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -32,7 +33,11 @@ public class Goal {
     private LocalDate targetDate;
 
     @Column(nullable = false)
-    private String status;
+    @Builder.Default
+    private String status = "IN_PROGRESS"; // IN_PROGRESS, ACHIEVED, ABANDONED
+
+    @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Task> tasks;
 
     @CreationTimestamp
     @Column(updatable = false)

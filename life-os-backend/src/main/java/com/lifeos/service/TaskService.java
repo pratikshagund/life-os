@@ -4,8 +4,10 @@ import com.lifeos.dto.TaskRequest;
 import com.lifeos.dto.TaskResponse;
 import com.lifeos.model.Task;
 import com.lifeos.model.User;
+import com.lifeos.repository.GoalRepository;
 import com.lifeos.repository.TaskRepository;
 import com.lifeos.repository.UserRepository;
+import com.lifeos.model.Goal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final GoalRepository goalRepository;
 
     @Transactional
     public TaskResponse createTask(TaskRequest request) {
@@ -46,6 +49,12 @@ public class TaskService {
                 .estimatedMinutes(request.getEstimatedMinutes())
                 .tags(request.getTags())
                 .build();
+
+        if (request.getGoalId() != null) {
+            Goal goal = goalRepository.findById(request.getGoalId())
+                    .orElseThrow(() -> new RuntimeException("Goal not found"));
+            task.setGoal(goal);
+        }
 
         task = taskRepository.save(task);
         return mapToResponse(task);
@@ -79,6 +88,7 @@ public class TaskService {
                 .scheduledEnd(task.getScheduledEnd())
                 .estimatedMinutes(task.getEstimatedMinutes())
                 .tags(task.getTags())
+                .goalId(task.getGoal() != null ? task.getGoal().getId() : null)
                 .build();
     }
 }

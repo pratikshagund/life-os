@@ -21,4 +21,5 @@ public class TaskResponse {
     private LocalDateTime scheduledEnd;
     private Integer estimatedMinutes;
     private String tags;
+    private UUID goalId;
 }
