@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/lifeos
+    username: lifeos_user
+    password: lifeos_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# Security Configuration disabled by default for dev until JWT is set up
+# (Handled via WebSecurityConfig later)
+
+# AI Configuration (Mocked for now)
+openai:
+  api:
+    key: "mock-key-do-not-use-in-production"

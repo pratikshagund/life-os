@@ -1,0 +1,24 @@
+<main class="flex min-h-screen bg-background-dark text-slate-50 font-sans">
+  <nav class="w-64 border-r border-white/5 bg-surface-dark/50 backdrop-blur-xl p-6 flex flex-col">
+    <div class="flex items-center gap-3 mb-12">
+      <span class="text-2xl">✨</span>
+      <h1 class="text-xl font-bold font-heading text-slate-50 tracking-tight">LifeOS</h1>
+    </div>
+    <ul class="flex flex-col gap-2">
+      <li routerLink="/planner" routerLinkActive="bg-primary/10 border-primary/20 text-white shadow-[0_0_15px_rgba(99,102,241,0.1)]" [routerLinkActiveOptions]="{exact: true}"
+          class="px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-all duration-200 cursor-pointer border border-transparent">
+        Smart Timetable
+      </li>
+      <li routerLink="/diary" routerLinkActive="bg-primary/10 border-primary/20 text-white shadow-[0_0_15px_rgba(99,102,241,0.1)]"
+          class="px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-all duration-200 cursor-pointer border border-transparent">
+        Daily Reflection
+      </li>
+      <li class="px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-all duration-200 cursor-pointer border border-transparent">
+        Analytics
+      </li>
+    </ul>
+  </nav>
+  <div class="flex-1 p-10 overflow-y-auto">
+    <router-outlet></router-outlet>
+  </div>
+</main>

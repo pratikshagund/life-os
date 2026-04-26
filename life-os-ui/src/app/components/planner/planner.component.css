@@ -1,0 +1,15 @@
+/* Planner specific styles */
+:host {
+  display: block;
+}
+
+/* Scrollbar styling for columns if they overflow */
+.min-h-\[500px\] {
+  max-height: calc(100vh - 350px);
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+.min-h-\[500px\]::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}

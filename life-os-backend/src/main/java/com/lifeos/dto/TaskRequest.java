@@ -1,0 +1,20 @@
+package com.lifeos.dto;
+
+import com.lifeos.model.Task.TaskPriority;
+import com.lifeos.model.Task.TaskStatus;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+public class TaskRequest {
+    private String title;
+    private String description;
+    private TaskStatus status;
+    private TaskPriority priority;
+    private boolean isRecurringBlock;
+    private LocalDateTime scheduledStart;
+    private LocalDateTime scheduledEnd;
+    private Integer estimatedMinutes;
+    private String tags;
+}

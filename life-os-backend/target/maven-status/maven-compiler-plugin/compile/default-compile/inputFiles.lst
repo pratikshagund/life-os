@@ -1,0 +1,16 @@
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\model\DiaryEntry.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\controller\DiaryController.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\model\Task.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\repository\UserRepository.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\model\Goal.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\dto\TaskRequest.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\model\User.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\repository\TaskRepository.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\repository\DiaryEntryRepository.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\service\DiaryService.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\LifeOsApplication.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\config\WebSecurityConfig.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\dto\DiaryEntryRequest.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\service\TaskService.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\controller\TaskController.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\dto\TaskResponse.java
