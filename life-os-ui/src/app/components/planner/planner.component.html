@@ -18,15 +18,15 @@
     </app-card>
     <app-card class="flex flex-col gap-1 border-l-4 border-l-primary/50">
       <span class="text-slate-500 text-xs font-bold uppercase tracking-widest">Pending</span>
-      <span class="text-2xl font-bold text-slate-100">{{ getTasksByStatus('PENDING').length }}</span>
+      <span class="text-2xl font-bold text-slate-100">{{ getTasksByStatus(TaskStatus.PENDING).length }}</span>
     </app-card>
     <app-card class="flex flex-col gap-1 border-l-4 border-l-yellow-500/50">
       <span class="text-slate-500 text-xs font-bold uppercase tracking-widest">In Progress</span>
-      <span class="text-2xl font-bold text-slate-100">{{ getTasksByStatus('IN_PROGRESS').length }}</span>
+      <span class="text-2xl font-bold text-slate-100">{{ getTasksByStatus(TaskStatus.IN_PROGRESS).length }}</span>
     </app-card>
     <app-card class="flex flex-col gap-1 border-l-4 border-l-green-500/50">
       <span class="text-slate-500 text-xs font-bold uppercase tracking-widest">Completed</span>
-      <span class="text-2xl font-bold text-slate-100">{{ getTasksByStatus('COMPLETED').length }}</span>
+      <span class="text-2xl font-bold text-slate-100">{{ getTasksByStatus(TaskStatus.COMPLETED).length }}</span>
     </app-card>
   </div>
 

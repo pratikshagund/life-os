@@ -28,6 +28,20 @@ public class RoutineService {
             throw new IllegalArgumentException("End time must be after start time");
         }
 
+        // Overlap Validation
+        List<Routine> existingRoutines = routineRepository.findByUserId(user.getId());
+        for (String day : request.getDaysOfWeek()) {
+            String dayUpper = day.toUpperCase();
+            boolean hasOverlap = existingRoutines.stream()
+                    .filter(r -> r.getDaysOfWeek().contains(dayUpper))
+                    .anyMatch(r -> (request.getStartTime().isBefore(r.getEndTime()) && 
+                                    request.getEndTime().isAfter(r.getStartTime())));
+            
+            if (hasOverlap) {
+                throw new IllegalArgumentException("Conflict: This routine overlaps with an existing one on " + day);
+            }
+        }
+
         Routine routine = Routine.builder()
                 .user(user)
                 .name(request.getName())

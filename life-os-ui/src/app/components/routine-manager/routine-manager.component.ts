@@ -34,6 +34,7 @@ export class RoutineManagerComponent implements OnInit {
 
   isLoading = false;
   showAddModal = false;
+  errorMessage = '';
 
   constructor(private routineService: RoutineService) {}
 
@@ -83,6 +84,7 @@ export class RoutineManagerComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to create routine', err);
+        this.errorMessage = err.error?.error || 'An unexpected error occurred. Please try again.';
         this.isLoading = false;
       }
     });
@@ -107,5 +109,6 @@ export class RoutineManagerComponent implements OnInit {
       daysOfWeek: [],
       isBlocking: true
     };
+    this.errorMessage = '';
   }
 }

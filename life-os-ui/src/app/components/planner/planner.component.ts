@@ -158,7 +158,7 @@ export class PlannerComponent implements OnInit {
     });
   }
 
-  getTasksByStatus(status: string): TaskResponse[] {
+  getTasksByStatus(status: TaskStatus): TaskResponse[] {
     return this.tasks.filter(t => t.status === status);
   }
 

@@ -50,8 +50,10 @@
   - `routine-manager/`: New Angular component for managing personal routines.
   - `routine.service.ts` & `routine.ts`: Frontend service and model.
 - **Integration Logic:** The `PlannerComponent` now fetches active routines for "Today" and injects them into the `isOverlapping` check, preventing users from scheduling tasks during blocked routine times.
+- **Security & Reliability (Overlap Validation):** Implemented a backend check in `RoutineService` to prevent creating overlapping routines for the same day. Added a `GlobalExceptionHandler` to return user-friendly error messages (400 Bad Request) instead of internal server errors.
 
 ## Terminology & Concepts Log (Phase 2)
+- **Global Exception Handling (`@ControllerAdvice`):** A centralized way to handle exceptions across all controllers. *Why?* It prevents code duplication, ensures consistent error responses (JSON), and decouples business logic from error mapping.
 - **Soft Delete vs. Hard Delete:** We implemented hard delete for routines for now, but in professional systems, "Soft Delete" (using a `deleted` flag) is often preferred to keep historical records.
 - **CSV Storage in SQL:** Storing "Days of Week" as a comma-separated string is a simple way to handle multi-select data without a separate join table, though it makes SQL filtering slightly more complex (`LIKE` query).
-- **Time Representation (`LocalTime`):** Using `LocalTime` in Java/Spring Boot is the standard for representing a time of day without a date, perfect for recurring routines.
+- **Interval Overlap Algorithm:** The logic `(start1 < end2 && end1 > start2)` is the mathematically correct way to check if two time ranges overlap. We applied this both for Task-Task, Task-Routine, and Routine-Routine conflicts.
