@@ -39,3 +39,19 @@
 - **UUID vs Auto-Incrementing IDs:** We used UUIDs for Primary Keys. *Why?* UUIDs are globally unique, meaning if we merge databases or scale, IDs will never collide. They are also harder for attackers to guess in URLs.
 - **Constants File (Decoupling):** Extracting hardcoded strings (like API URLs) into a centralized file (`api.constants.ts`) so that if the URL changes, we only have to update it in one place rather than in 50 different files.
 - **Glassmorphism UI:** A modern web design trend using semi-transparent backgrounds with background blur (`backdrop-filter: blur()`) to create a frosted glass effect. We used Vanilla CSS instead of a heavy library like Ignite UI to keep the application fast and fully customizable.
+
+## Flexible Routine Management (Phase 2)
+- **Status:** Core Implementation Complete
+- **Architectural Decision (No Hardcoding):** Instead of hardcoding morning/work routines, we implemented a generic `Routine` entity that allows users to define recurring time blocks for specific days of the week.
+- **Generated Files:**
+  - `Routine.java`: Entity with `startTime`, `endTime`, and `daysOfWeek` (stored as CSV).
+  - `RoutineRepository.java`: Custom query using `LIKE %dayOfWeek%` for dynamic filtering.
+  - `RoutineService.java` & `RoutineController.java`: Full CRUD with overlap validation logic.
+  - `routine-manager/`: New Angular component for managing personal routines.
+  - `routine.service.ts` & `routine.ts`: Frontend service and model.
+- **Integration Logic:** The `PlannerComponent` now fetches active routines for "Today" and injects them into the `isOverlapping` check, preventing users from scheduling tasks during blocked routine times.
+
+## Terminology & Concepts Log (Phase 2)
+- **Soft Delete vs. Hard Delete:** We implemented hard delete for routines for now, but in professional systems, "Soft Delete" (using a `deleted` flag) is often preferred to keep historical records.
+- **CSV Storage in SQL:** Storing "Days of Week" as a comma-separated string is a simple way to handle multi-select data without a separate join table, though it makes SQL filtering slightly more complex (`LIKE` query).
+- **Time Representation (`LocalTime`):** Using `LocalTime` in Java/Spring Boot is the standard for representing a time of day without a date, perfect for recurring routines.

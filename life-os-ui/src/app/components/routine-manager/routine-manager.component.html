@@ -1,0 +1,108 @@
+<div class="max-w-5xl mx-auto animate-[fadeIn_0.5s_ease-out]">
+  <div class="flex items-center justify-between mb-10">
+    <div>
+      <h2 class="text-3xl font-heading font-semibold text-slate-50 mb-2">Routine Settings</h2>
+      <p class="text-slate-400 text-sm">Configure your flexible recurring routines (No hardcoding!).</p>
+    </div>
+    <button (click)="showAddModal = true" 
+            class="bg-primary hover:bg-primary-dark text-white px-6 py-2.5 rounded-xl font-medium transition-all duration-200 shadow-[0_4px_14px_rgba(99,102,241,0.39)] flex items-center gap-2">
+      <span class="text-xl">+</span> Add Routine
+    </button>
+  </div>
+
+  <!-- Routine List -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <app-card *ngFor="let routine of routines" class="group relative overflow-hidden">
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <h3 class="text-xl font-semibold text-slate-100 mb-1">{{ routine.name }}</h3>
+          <div class="flex items-center gap-2 text-primary font-medium text-sm">
+            <span class="text-xs">🕒</span> {{ routine.startTime }} - {{ routine.endTime }}
+          </div>
+        </div>
+        <button (click)="deleteRoutine(routine.id)" 
+                class="text-slate-500 hover:text-red-400 p-2 transition-colors opacity-0 group-hover:opacity-100">
+          <span class="text-lg">🗑️</span>
+        </button>
+      </div>
+
+      <div class="flex flex-wrap gap-2 mt-4">
+        <span *ngFor="let day of routine.daysOfWeek.split(',')" 
+              class="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+          {{ day.substring(0, 3) }}
+        </span>
+      </div>
+
+      <!-- Background decoration -->
+      <div class="absolute -right-4 -bottom-4 opacity-[0.03] text-6xl group-hover:opacity-[0.08] transition-opacity">
+        🔒
+      </div>
+    </app-card>
+
+    <div *ngIf="routines.length === 0 && !isLoading" 
+         class="col-span-full py-20 text-center bg-white/[0.02] border border-dashed border-white/10 rounded-2xl">
+      <p class="text-slate-500 italic">No routines defined yet. Start by adding your morning routine or office hours!</p>
+    </div>
+  </div>
+</div>
+
+<!-- Add Routine Modal -->
+<div *ngIf="showAddModal" class="fixed inset-0 z-50 flex items-center justify-center p-6 animate-[fadeIn_0.2s_ease-out]">
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="showAddModal = false"></div>
+  <app-card class="w-full max-w-lg relative z-10 shadow-2xl border-white/10" padding="large">
+    <h3 class="text-2xl font-heading font-semibold text-slate-50 mb-6">Create New Routine</h3>
+    
+    <form (ngSubmit)="createRoutine()" class="space-y-4">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Routine Name</label>
+        <input type="text" name="name" [(ngModel)]="newRoutine.name" required
+               class="bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-slate-50 text-sm focus:outline-none focus:border-primary transition-all"
+               placeholder="e.g., Morning Routine, Office Hours">
+      </div>
+      
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1.5">
+          <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Start Time</label>
+          <input type="time" name="startTime" [(ngModel)]="newRoutine.startTime" required
+                 class="bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-slate-50 text-sm focus:outline-none focus:border-primary transition-all">
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">End Time</label>
+          <input type="time" name="endTime" [(ngModel)]="newRoutine.endTime" required
+                 class="bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-slate-50 text-sm focus:outline-none focus:border-primary transition-all">
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2.5">
+        <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Repeat On</label>
+        <div class="flex flex-wrap gap-2">
+          <button *ngFor="let day of days" type="button"
+                  (click)="toggleDay(day.value)"
+                  [class]="'px-3 py-2 rounded-lg text-xs font-bold transition-all border ' + 
+                           (isDaySelected(day.value) ? 'bg-primary border-primary text-white shadow-lg' : 'bg-white/5 border-white/10 text-slate-500 hover:text-slate-200')">
+            {{ day.label }}
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 py-2">
+        <input type="checkbox" name="isBlocking" [(ngModel)]="newRoutine.isBlocking" id="isBlocking"
+               class="w-4 h-4 rounded border-white/10 bg-black/20 text-primary focus:ring-primary">
+        <label for="isBlocking" class="text-sm text-slate-400 cursor-pointer select-none">
+          Strictly block scheduling during this time
+        </label>
+      </div>
+
+      <div class="flex gap-4 mt-8">
+        <button type="button" (click)="showAddModal = false"
+                class="flex-1 px-6 py-3 rounded-xl border border-white/10 text-slate-400 font-medium hover:bg-white/5 transition-all">
+          Cancel
+        </button>
+        <button type="submit" [disabled]="!newRoutine.name || !newRoutine.startTime || !newRoutine.endTime || newRoutine.daysOfWeek.length === 0 || isLoading"
+                class="flex-1 bg-primary hover:bg-primary-dark text-white font-medium py-3 rounded-xl transition-all shadow-[0_4px_14px_rgba(99,102,241,0.39)] disabled:opacity-50">
+          {{ isLoading ? 'Saving...' : 'Save Routine' }}
+        </button>
+      </div>
+    </form>
+  </app-card>
+</div>

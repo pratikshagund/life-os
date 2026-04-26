@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
 import { TaskRequest, TaskResponse, TaskStatus, TaskPriority } from '../../models/task';
+import { Routine } from '../../models/routine';
 import { CardComponent } from '../ui/card/card.component';
+import { RoutineService } from '../../services/routine.service';
 import { TASK_PRIORITY_OPTIONS, TASK_STATUS_COLUMNS } from '../../constants/ui.constants';
 
 @Component({
@@ -15,6 +17,7 @@ import { TASK_PRIORITY_OPTIONS, TASK_STATUS_COLUMNS } from '../../constants/ui.c
 })
 export class PlannerComponent implements OnInit {
   tasks: TaskResponse[] = [];
+  routines: Routine[] = [];
   newTask: TaskRequest = {
     title: '',
     description: '',
@@ -33,7 +36,10 @@ export class PlannerComponent implements OnInit {
   showAddModal = false;
   errorMessage = '';
 
-  constructor(private taskService: TaskService) {}
+  constructor(
+    private taskService: TaskService,
+    private routineService: RoutineService
+  ) {}
 
   getPriorityOption(priority: TaskPriority) {
     return this.taskPriorityOptions.find(o => o.value === priority) || this.taskPriorityOptions[1];
@@ -49,20 +55,49 @@ export class PlannerComponent implements OnInit {
   }
 
   isOverlapping(start: string, end: string, excludeId?: string): boolean {
-    const newStart = new Date(start).getTime();
-    const newEnd = new Date(end).getTime();
+    const newStart = new Date(start);
+    const newEnd = new Date(end);
+    const newStartTime = newStart.getTime();
+    const newEndTime = newEnd.getTime();
 
-    return this.tasks.some(task => {
+    // Check against existing tasks
+    const taskOverlap = this.tasks.some(task => {
       if (task.id === excludeId || !task.scheduledStart || !task.scheduledEnd) return false;
       const existingStart = new Date(task.scheduledStart).getTime();
       const existingEnd = new Date(task.scheduledEnd).getTime();
 
-      return (newStart < existingEnd && newEnd > existingStart);
+      return (newStartTime < existingEnd && newEndTime > existingStart);
+    });
+
+    if (taskOverlap) return true;
+
+    // Check against active routines (strict blocking)
+    return this.routines.some(routine => {
+      if (!routine.isBlocking) return false;
+      
+      const rStart = new Date(newStart);
+      const [sh, sm] = routine.startTime.split(':');
+      rStart.setHours(parseInt(sh), parseInt(sm), 0, 0);
+
+      const rEnd = new Date(newStart);
+      const [eh, em] = routine.endTime.split(':');
+      rEnd.setHours(parseInt(eh), parseInt(em), 0, 0);
+
+      return (newStartTime < rEnd.getTime() && newEndTime > rStart.getTime());
     });
   }
 
   ngOnInit() {
     this.fetchTasks();
+    this.fetchActiveRoutines();
+  }
+
+  fetchActiveRoutines() {
+    const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+    this.routineService.getActiveRoutines(today).subscribe({
+      next: (data) => this.routines = data,
+      error: (err) => console.error('Failed to fetch routines', err)
+    });
   }
 
   fetchTasks() {

@@ -43,6 +43,20 @@
         </span>
       </div>
       
+      <!-- Routines for this column (Display in PENDING column) -->
+      <ng-container *ngIf="column.id === 'PENDING' && routines.length > 0">
+        <div *ngFor="let routine of routines" 
+             class="bg-primary/5 border border-primary/20 rounded-2xl p-4 relative overflow-hidden group mb-2">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-[10px] font-bold uppercase tracking-tighter text-primary">Routine Block</span>
+            <span class="text-[10px] text-primary/60 font-medium">🕒 {{ routine.startTime }} - {{ routine.endTime }}</span>
+          </div>
+          <h4 class="text-slate-100 font-medium text-sm">{{ routine.name }}</h4>
+          <div class="absolute -right-2 -bottom-2 opacity-[0.05] text-4xl">🔒</div>
+        </div>
+        <div class="h-px bg-white/5 my-2"></div>
+      </ng-container>
+
       <div class="flex flex-col gap-4 min-h-[500px]">
         <app-card *ngFor="let task of getTasksByStatus(column.id)" 
                   [class]="'group transition-all duration-300 ' + 
