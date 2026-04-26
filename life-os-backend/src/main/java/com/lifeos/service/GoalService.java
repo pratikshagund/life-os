@@ -8,6 +8,7 @@ import com.lifeos.model.User;
 import com.lifeos.repository.GoalRepository;
 import com.lifeos.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +21,10 @@ import java.util.stream.Collectors;
 public class GoalService {
 
     private final GoalRepository goalRepository;
-    private final UserRepository userRepository;
 
     @Transactional
     public GoalResponse createGoal(GoalRequest request) {
-        User user = getMockUser();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Goal goal = Goal.builder()
                 .user(user)
                 .title(request.getTitle())
@@ -37,7 +37,7 @@ public class GoalService {
     }
 
     public List<GoalResponse> getAllGoals() {
-        User user = getMockUser();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return goalRepository.findByUserId(user.getId()).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
@@ -70,14 +70,4 @@ public class GoalService {
                 .build();
     }
 
-    private User getMockUser() {
-        if (userRepository.count() == 0) {
-            User newUser = User.builder()
-                    .email("test@lifeos.com")
-                    .passwordHash("mocked-hash")
-                    .build();
-            return userRepository.save(newUser);
-        }
-        return userRepository.findAll().get(0);
-    }
 }

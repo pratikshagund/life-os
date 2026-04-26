@@ -21,6 +21,7 @@ export interface TaskRequest {
   scheduledEnd?: string;
   estimatedMinutes?: number;
   tags?: string;
+  goalId?: string;
 }
 
 export interface TaskResponse {
@@ -34,4 +35,5 @@ export interface TaskResponse {
   scheduledEnd: string;
   estimatedMinutes: number;
   tags: string;
+  goalId?: string;
 }

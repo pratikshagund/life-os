@@ -9,6 +9,7 @@ import com.lifeos.repository.TaskRepository;
 import com.lifeos.repository.UserRepository;
 import com.lifeos.model.Goal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,16 +27,7 @@ public class TaskService {
 
     @Transactional
     public TaskResponse createTask(TaskRequest request) {
-        User user;
-        if (userRepository.count() == 0) {
-            User newUser = User.builder()
-                    .email("test@lifeos.com")
-                    .passwordHash("mocked-hash")
-                    .build();
-            user = userRepository.save(newUser);
-        } else {
-            user = userRepository.findAll().get(0);
-        }
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Task task = Task.builder()
                 .user(user)
@@ -61,7 +53,7 @@ public class TaskService {
     }
 
     public List<TaskResponse> getAllTasks() {
-        User user = userRepository.findAll().get(0);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return taskRepository.findByUserOrderByScheduledStartAsc(user).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());

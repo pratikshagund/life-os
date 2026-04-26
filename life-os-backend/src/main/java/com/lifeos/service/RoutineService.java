@@ -6,6 +6,7 @@ import com.lifeos.model.User;
 import com.lifeos.repository.RoutineRepository;
 import com.lifeos.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,11 +19,10 @@ import java.util.stream.Collectors;
 public class RoutineService {
 
     private final RoutineRepository routineRepository;
-    private final UserRepository userRepository;
 
     @Transactional
     public Routine createRoutine(RoutineRequest request) {
-        User user = getMockUser();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (request.getEndTime().isBefore(request.getStartTime())) {
             throw new IllegalArgumentException("End time must be after start time");
@@ -55,12 +55,12 @@ public class RoutineService {
     }
 
     public List<Routine> getAllRoutines() {
-        User user = getMockUser();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return routineRepository.findByUserId(user.getId());
     }
 
     public List<Routine> getActiveRoutines(String dayOfWeek) {
-        User user = getMockUser();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return routineRepository.findActiveRoutines(user.getId(), dayOfWeek.toUpperCase());
     }
 
@@ -69,14 +69,4 @@ public class RoutineService {
         routineRepository.deleteById(id);
     }
 
-    private User getMockUser() {
-        if (userRepository.count() == 0) {
-            User newUser = User.builder()
-                    .email("test@lifeos.com")
-                    .passwordHash("mocked-hash")
-                    .build();
-            return userRepository.save(newUser);
-        }
-        return userRepository.findAll().get(0);
-    }
 }

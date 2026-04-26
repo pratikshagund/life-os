@@ -22,3 +22,11 @@ spring:
 openai:
   api:
     key: "mock-key-do-not-use-in-production"
+
+application:
+  security:
+    jwt:
+      # This is a 256-bit secret key (Base64 encoded)
+      secret-key: mE9OYlJmVWpYbjJyNXV4eC9BQDQoRythS2JQMGRTZzZLa1lw
+      # Expiration time: 1 day in milliseconds
+      expiration: 86400000

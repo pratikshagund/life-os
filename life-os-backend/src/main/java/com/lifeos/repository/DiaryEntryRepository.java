@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface DiaryEntryRepository extends JpaRepository<DiaryEntry, UUID> {
-    List<DiaryEntry> findAllByOrderByEntryDateDesc();
+    List<DiaryEntry> findByUserIdOrderByEntryDateDesc(UUID userId);
 }
