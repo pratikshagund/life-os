@@ -1,0 +1,80 @@
+<div class="dashboard-container">
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">Life Performance Dashboard</h1>
+    <p class="text-slate-400">Your AI-powered life metrics at a glance.</p>
+  </header>
+
+  <div *ngIf="isLoading" class="flex justify-center items-center h-64">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+  </div>
+
+  <div *ngIf="!isLoading && stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Stat Cards -->
+    <app-card>
+      <div class="p-4">
+        <h3 class="text-slate-400 text-sm font-medium">Overall Productivity</h3>
+        <p class="text-3xl font-bold text-white mt-1">{{ stats.overallProductivityScore | number:'1.0-0' }}%</p>
+        <div class="mt-4 h-2 bg-slate-800 rounded-full overflow-hidden">
+          <div class="h-full bg-indigo-500" [style.width.%]="stats.overallProductivityScore"></div>
+        </div>
+      </div>
+    </app-card>
+
+    <app-card>
+      <div class="p-4">
+        <h3 class="text-slate-400 text-sm font-medium">Tasks Completed</h3>
+        <p class="text-3xl font-bold text-white mt-1">{{ stats.totalTasksCompleted }}</p>
+        <p class="text-xs text-slate-500 mt-2">Out of {{ stats.totalTasksPlanned }} planned this week</p>
+      </div>
+    </app-card>
+
+    <app-card>
+      <div class="p-4">
+        <h3 class="text-slate-400 text-sm font-medium">Weekly Insight</h3>
+        <p class="text-sm text-indigo-300 mt-2 italic leading-relaxed">"{{ stats.weeklyInsight }}"</p>
+      </div>
+    </app-card>
+
+    <app-card>
+      <div class="p-4">
+        <h3 class="text-slate-400 text-sm font-medium">Current Streak</h3>
+        <p class="text-3xl font-bold text-emerald-400 mt-1">5 Days</p>
+        <p class="text-xs text-slate-500 mt-2">Maintain consistency to grow!</p>
+      </div>
+    </app-card>
+  </div>
+
+  <!-- Main Chart Section -->
+  <div *ngIf="!isLoading && stats" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2">
+      <app-card>
+        <div class="p-6">
+          <h2 class="text-xl font-semibold text-white mb-6">Productivity Trend</h2>
+          <div class="h-80 w-full relative">
+            <canvas #productivityChart></canvas>
+          </div>
+        </div>
+      </app-card>
+    </div>
+
+    <div>
+      <app-card>
+        <div class="p-6">
+          <h2 class="text-xl font-semibold text-white mb-6">Daily Breakdown</h2>
+          <div class="space-y-4">
+            <div *ngFor="let day of stats.dailyStats" class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+              <div>
+                <p class="text-white font-medium">{{ day.date | date:'EEEE' }}</p>
+                <p class="text-xs text-slate-400">{{ day.mood || 'No diary entry' }}</p>
+              </div>
+              <div class="text-right">
+                <p class="text-indigo-400 font-bold">{{ day.productivityScore }}%</p>
+                <p class="text-[10px] text-slate-500">{{ day.tasksCompleted }}/{{ day.tasksPlanned }} tasks</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-card>
+    </div>
+  </div>
+</div>

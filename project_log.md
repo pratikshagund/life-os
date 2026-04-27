@@ -70,4 +70,15 @@
 ## Terminology & Concepts Log (Phase 3)
 - **Bidirectional Relationship:** A relationship in JPA where both entities have a reference to each other. *Careful:* Requires `mappedBy` on the non-owning side to avoid duplicate foreign keys.
 - **Lazy Loading (`FetchType.LAZY`):** JPA strategy to only load associated data (like a goal's tasks) when explicitly accessed. *Why?* Prevents "N+1 Problem" and saves memory.
-- **DTO (Data Transfer Object):** An object that carries data between processes. *Why?* To hide sensitive data (like `passwordHash`) and tailor responses for the UI (like adding `progressPercentage`).
+
+# Phase 4: AI Reflection Engine & Life Dashboard (In Progress)
+## Technical Implementation Details
+- **Data Aggregation Logic:** Implemented `ReflectionService` to correlate `Task` completion status with `DiaryEntry` mood data over a rolling 7-day window.
+- **Data Visualization:** Integrated `Chart.js` in the Angular frontend to render dynamic productivity trends using a minimalist, glassmorphism design.
+- **RESTful Stats API:** Created `StatsController` to expose aggregated weekly metrics, reducing frontend processing load.
+
+## Terminology & Concepts Log (Phase 4)
+- **Data Aggregation:** The process of collecting and summarizing raw data (e.g., individual tasks) into a concise format (e.g., weekly completion percentage) for reporting or analysis.
+- **Sentiment Analysis (Mocked):** Using AI to interpret the emotional tone of a text (Diary entries) and converting it into a numeric score or tag (e.g., "Stressed" -> 40%).
+- **Intersection of Data:** Correlating different data types (Tasks + Mood) to find hidden patterns (e.g., "I am 30% more productive on days I feel 'Happy'").
+- **Stateless Aggregation:** Calculating stats on-the-fly via the API instead of storing redundant aggregated data in the DB, ensuring "Ground Truth" is always maintained in the primary tables.
