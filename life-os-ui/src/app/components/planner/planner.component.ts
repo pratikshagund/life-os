@@ -159,6 +159,34 @@ export class PlannerComponent implements OnInit {
     });
   }
 
+  autoSchedule() {
+    this.isLoading = true;
+    this.taskService.autoScheduleTasks().subscribe({
+      next: (newlyScheduled) => {
+        // Update local list with newly scheduled tasks
+        newlyScheduled.forEach(updatedTask => {
+          const index = this.tasks.findIndex(t => t.id === updatedTask.id);
+          if (index !== -1) {
+            this.tasks[index] = updatedTask;
+          } else {
+            this.tasks.push(updatedTask);
+          }
+        });
+        this.isLoading = false;
+        // Optional: Sort tasks by start time again
+        this.tasks.sort((a, b) => {
+          if (!a.scheduledStart || !b.scheduledStart) return 0;
+          return new Date(a.scheduledStart).getTime() - new Date(b.scheduledStart).getTime();
+        });
+      },
+      error: (err) => {
+        console.error('Auto-scheduling failed', err);
+        this.errorMessage = 'Auto-scheduling failed. Please try again.';
+        this.isLoading = false;
+      }
+    });
+  }
+
   updateStatus(task: TaskResponse, status: TaskStatus) {
     this.taskService.updateTaskStatus(task.id, status).subscribe({
       next: (updatedTask) => {

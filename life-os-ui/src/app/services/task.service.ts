@@ -24,4 +24,10 @@ export class TaskService {
     const params = new HttpParams().set('status', status);
     return this.http.put<TaskResponse>(`${this.apiUrl}/${taskId}/status`, null, { params });
   }
+
+  autoScheduleTasks(date?: string): Observable<TaskResponse[]> {
+    let params = new HttpParams();
+    if (date) params = params.set('date', date);
+    return this.http.post<TaskResponse[]>(`${this.apiUrl}/auto-schedule`, null, { params });
+  }
 }

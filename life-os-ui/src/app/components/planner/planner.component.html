@@ -4,10 +4,16 @@
       <h2 class="text-3xl font-heading font-semibold text-slate-50 mb-2">Smart Timetable</h2>
       <p class="text-slate-400 text-sm">Optimize your day with AI-assisted task scheduling.</p>
     </div>
-    <button (click)="showAddModal = true" 
-            class="bg-primary hover:bg-primary-dark text-white px-6 py-2.5 rounded-xl font-medium transition-all duration-200 shadow-[0_4px_14px_rgba(99,102,241,0.39)] flex items-center gap-2">
-      <span class="text-xl">+</span> New Task
-    </button>
+    <div class="flex gap-4">
+      <button (click)="autoSchedule()" [disabled]="isLoading"
+              class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-2.5 rounded-xl font-medium transition-all duration-200 flex items-center gap-2">
+        <span class="text-xl">✨</span> Auto-Schedule
+      </button>
+      <button (click)="showAddModal = true" 
+              class="bg-primary hover:bg-primary-dark text-white px-6 py-2.5 rounded-xl font-medium transition-all duration-200 shadow-[0_4px_14px_rgba(99,102,241,0.39)] flex items-center gap-2">
+        <span class="text-xl">+</span> New Task
+      </button>
+    </div>
   </div>
 
   <!-- Stats Header -->

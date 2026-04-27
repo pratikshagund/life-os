@@ -19,10 +19,17 @@ import java.util.UUID;
 public class TaskController {
 
     private final TaskService taskService;
+    private final com.lifeos.service.SchedulingService schedulingService;
 
     @PostMapping
     public ResponseEntity<TaskResponse> createTask(@RequestBody TaskRequest request) {
         return new ResponseEntity<>(taskService.createTask(request), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/auto-schedule")
+    public ResponseEntity<List<Task>> autoSchedule(@RequestParam(required = false) String date) {
+        java.time.LocalDate localDate = date != null ? java.time.LocalDate.parse(date) : java.time.LocalDate.now();
+        return ResponseEntity.ok(schedulingService.autoSchedule(localDate));
     }
 
     @GetMapping

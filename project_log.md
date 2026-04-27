@@ -81,4 +81,15 @@
 - **Data Aggregation:** The process of collecting and summarizing raw data (e.g., individual tasks) into a concise format (e.g., weekly completion percentage) for reporting or analysis.
 - **Sentiment Analysis (Mocked):** Using AI to interpret the emotional tone of a text (Diary entries) and converting it into a numeric score or tag (e.g., "Stressed" -> 40%).
 - **Intersection of Data:** Correlating different data types (Tasks + Mood) to find hidden patterns (e.g., "I am 30% more productive on days I feel 'Happy'").
-- **Stateless Aggregation:** Calculating stats on-the-fly via the API instead of storing redundant aggregated data in the DB, ensuring "Ground Truth" is always maintained in the primary tables.
+
+# Phase 5: Smart Timetable Auto-Generation (Completed 2026-04-27)
+## Technical Implementation Details
+- **Greedy Scheduling Algorithm:** Implemented `SchedulingService` which iterates through pending tasks and fits them into the first available free slots (15-min intervals), respecting fixed `Routine` blocks and existing `Task` schedules.
+- **Priority-First Placement:** Enhanced `TaskRepository` to fetch tasks ordered by `TaskPriority` (HIGH > MEDIUM > LOW), ensuring critical work is scheduled earlier in the day.
+- **Conflict Awareness:** Developed a centralized conflict detection logic that prevents overlaps between routines, previously scheduled tasks, and newly placed tasks in a single transaction.
+
+## Terminology & Concepts Log (Phase 5)
+- **Greedy Algorithm:** A problem-solving heuristic that makes the locally optimal choice at each stage with the hope of finding a global optimum. In our case, it picks the first available time slot for the highest priority task.
+- **O(N*M) Complexity:** The scheduling loop iterates through N tasks and checks M possible time slots. While not the most efficient for millions of tasks, it is highly responsive for a personal daily planner.
+- **Transaction Atomicity:** Ensuring that either the entire daily schedule is generated correctly or none of it is, preventing "partial schedules" if a conflict or error occurs mid-process.
+- **Heuristic-Based Scheduling:** Using task priority and estimated duration as "heuristics" to decide the order and placement of activities.

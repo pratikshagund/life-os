@@ -1,4 +1,5 @@
 C:\Life OS\life-os-backend\src\main\java\com\lifeos\dto\AuthRequest.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\service\ReflectionService.java
 C:\Life OS\life-os-backend\src\main\java\com\lifeos\dto\RoutineRequest.java
 C:\Life OS\life-os-backend\src\main\java\com\lifeos\controller\AuthController.java
 C:\Life OS\life-os-backend\src\main\java\com\lifeos\controller\DiaryController.java
@@ -26,7 +27,9 @@ C:\Life OS\life-os-backend\src\main\java\com\lifeos\repository\UserRepository.ja
 C:\Life OS\life-os-backend\src\main\java\com\lifeos\config\SecurityConfig.java
 C:\Life OS\life-os-backend\src\main\java\com\lifeos\repository\RoutineRepository.java
 C:\Life OS\life-os-backend\src\main\java\com\lifeos\model\User.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\dto\WeeklyStatsResponse.java
 C:\Life OS\life-os-backend\src\main\java\com\lifeos\service\RoutineService.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\controller\StatsController.java
 C:\Life OS\life-os-backend\src\main\java\com\lifeos\dto\GoalRequest.java
 C:\Life OS\life-os-backend\src\main\java\com\lifeos\LifeOsApplication.java
 C:\Life OS\life-os-backend\src\main\java\com\lifeos\config\GlobalExceptionHandler.java

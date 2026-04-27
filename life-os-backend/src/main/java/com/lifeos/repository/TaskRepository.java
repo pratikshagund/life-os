@@ -11,4 +11,6 @@ import java.util.UUID;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, UUID> {
     List<Task> findByUserOrderByScheduledStartAsc(User user);
+
+    List<Task> findByUserAndStatusOrderByPriorityDesc(User user, Task.TaskStatus status);
 }
