@@ -26,6 +26,7 @@ com\lifeos\model\Task$TaskStatus.class
 com\lifeos\dto\GoalResponse.class
 com\lifeos\service\DiaryService.class
 com\lifeos\controller\DiaryController.class
+com\lifeos\service\SchedulingService.class
 com\lifeos\config\SecurityConfig.class
 com\lifeos\service\ReflectionService.class
 com\lifeos\model\Routine$RoutineBuilder.class

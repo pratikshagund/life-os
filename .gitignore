@@ -1,0 +1,14 @@
+# Backend Build & Runtime Logs
+/life-os-backend/build_log.txt
+/life-os-backend/current_build_log.txt
+/life-os-backend/maven_error_log.txt
+/life-os-backend/maven_output.txt
+/life-os-backend/target/
+
+# Environment secrets
+.env
+*.env.local
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -35,3 +35,4 @@ C:\Life OS\life-os-backend\src\main\java\com\lifeos\LifeOsApplication.java
 C:\Life OS\life-os-backend\src\main\java\com\lifeos\config\GlobalExceptionHandler.java
 C:\Life OS\life-os-backend\src\main\java\com\lifeos\dto\DiaryEntryRequest.java
 C:\Life OS\life-os-backend\src\main\java\com\lifeos\controller\GoalController.java
+C:\Life OS\life-os-backend\src\main\java\com\lifeos\service\SchedulingService.java

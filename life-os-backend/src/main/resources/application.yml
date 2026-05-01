@@ -1,32 +1,31 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/lifeos
-    username: lifeos_user
-    password: lifeos_password
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/lifeos}
+    username: ${DATABASE_USERNAME:lifeos_user}
+    password: ${DATABASE_PASSWORD:lifeos_password}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
 
-# Security Configuration disabled by default for dev until JWT is set up
-# (Handled via WebSecurityConfig later)
-
-# AI Configuration (Mocked for now)
+# AI Configuration
 openai:
   api:
-    key: "mock-key-do-not-use-in-production"
+    key: ${OPENAI_API_KEY:mock-key}
 
 application:
   security:
     jwt:
-      # This is a 256-bit secret key (Base64 encoded)
-      secret-key: mE9OYlJmVWpYbjJyNXV4eC9BQDQoRythS2JQMGRTZzZLa1lw
-      # Expiration time: 1 day in milliseconds
-      expiration: 86400000
+      secret-key: ${JWT_SECRET_KEY:mE9OYlJmVWpYbjJyNXV4eC9BQDQoRythS2JQMGRTZzZLa1lw}
+      expiration: ${JWT_EXPIRATION:86400000}
+
+# CORS - allow frontend origin
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200}

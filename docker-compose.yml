@@ -1,5 +1,6 @@
 
 services:
+  # ── PostgreSQL Database ──────────────────────────────────────────────────────
   db:
     image: postgres:15-alpine
     container_name: lifeos-postgres
@@ -11,6 +12,44 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lifeos_user -d lifeos"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ── Spring Boot Backend ──────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./life-os-backend
+      dockerfile: Dockerfile
+    container_name: lifeos-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 8080
+      DATABASE_URL: jdbc:postgresql://db:5432/lifeos
+      DATABASE_USERNAME: lifeos_user
+      DATABASE_PASSWORD: lifeos_password
+      JWT_SECRET_KEY: mE9OYlJmVWpYbjJyNXV4eC9BQDQoRythS2JQMGRTZzZLa1lw
+      JWT_EXPIRATION: 86400000
+      CORS_ALLOWED_ORIGINS: http://localhost
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  # ── Angular Frontend (Nginx) ─────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./life-os-ui
+      dockerfile: Dockerfile
+    container_name: lifeos-frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
     restart: unless-stopped
 
 volumes:
