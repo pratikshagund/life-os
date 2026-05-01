@@ -1,0 +1,28 @@
+# Maven compiled output — never needed, Docker builds from source
+target/
+
+# Large log files generated during local development
+build_log.txt
+current_build_log.txt
+maven_error_log.txt
+maven_output.txt
+
+# IDE and editor files
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+.vscode/
+
+# Git
+.git
+.gitignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local environment overrides
+.env
+*.env.local

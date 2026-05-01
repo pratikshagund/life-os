@@ -1,0 +1,26 @@
+# Node modules — reinstalled inside Docker via npm ci
+node_modules/
+
+# Angular build output — built fresh inside Docker
+dist/
+.angular/cache/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.sublime-workspace
+
+# Git
+.git
+.gitignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local environment
+.env
+*.env.local
+
+# Test output
+coverage/
